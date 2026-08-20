@@ -5,6 +5,8 @@ from datetime import datetime, timedelta
 
 BASE_URL = "https://api.github.com"
 GITHUB_TOKEN = os.getenv("GH_TOKEN")
+if not GITHUB_TOKEN:
+    raise SystemExit("GH_TOKEN environment variable is not set or empty. Check that the GH_TOKEN secret is defined at the repository level (Settings > Secrets and variables > Actions), not in an environment scope not referenced by this workflow.")
 headers = {
     "Authorization": f"token {GITHUB_TOKEN}",
     "Accept": "application/vnd.github.v3+json"
@@ -12,6 +14,8 @@ headers = {
 
 def get_github_data(endpoint):
     response = requests.get(f"{BASE_URL}{endpoint}", headers=headers)
+    if not response.ok:
+        print(f"GitHub API error {response.status_code} for {endpoint}: {response.text}")
     response.raise_for_status()
     return response.json()
 
