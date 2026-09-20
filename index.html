@@ -499,11 +499,11 @@
         window.scrollTo(0, 0);
     }
 
-    function showPreview() {
+    function showPreview(pushState = true) {
         document.getElementById('previewView').style.display = 'flex';
         document.getElementById('dashboardView').style.display = 'none';
         document.getElementById('mainHeader').style.display = 'block';
-        history.pushState({view: 'preview'}, '', '#preview');
+        if (pushState) history.pushState({view: 'preview'}, '', '#preview');
         window.scrollTo(0, previewScrollPosition);
     }
 
@@ -530,7 +530,7 @@
     if (hash && hash !== 'preview') {
         showDashboard(hash);
     } else {
-        showPreview();
+        showPreview(false);
     }
     </script>
 </body>
