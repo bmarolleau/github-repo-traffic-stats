@@ -11,6 +11,7 @@ def create_plot(df, title, filename):
     last_day_previous_month = first_day_current_month - timedelta(days=1)
     first_day_previous_month = last_day_previous_month.replace(day=1)
     df_filtered = df.loc[first_day_previous_month:last_day_previous_month]
+    df_filtered = df_filtered[~df_filtered.index.duplicated(keep='last')]
 
     # add zeros if there is no value 
     date_range = pd.date_range(start=first_day_previous_month, end=last_day_previous_month, freq='D').date
