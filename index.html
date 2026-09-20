@@ -521,12 +521,17 @@
             const imgSrc = item.querySelector('img').src;
             const filename = imgSrc.split('/').pop();
             const dataSource = filename.replace('.webp', '');
-            this.showDashboard(dataSource);
+            showDashboard(dataSource);
         });
     });
-    showPreview();
 
-    loadDataAndCreateCharts();
+    // Handle direct URL with hash (e.g. #IBM-i-Application-Modernization-with-Bob)
+    const hash = window.location.hash.slice(1);
+    if (hash && hash !== 'preview') {
+        showDashboard(hash);
+    } else {
+        showPreview();
+    }
     </script>
 </body>
 </html>
