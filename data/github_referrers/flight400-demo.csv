@@ -51,3 +51,4 @@ date,ref_1,ref_1_count,ref_1_uniques,ref_2,ref_2_count,ref_2_uniques,ref_3,ref_3
 2026-10-07,github.com,51,31,teams.public.onecdn.static.microsoft,22,9,github.ibm.com,21,16,techzone.ibm.com,16,11,Google,12,10,youtube.com,6,6,chatgpt.com,4,2,claude.ai,1,1,,,,,,
 2026-10-08,github.com,56,35,github.ibm.com,23,15,techzone.ibm.com,13,9,teams.public.onecdn.static.microsoft,13,8,Google,12,10,youtube.com,6,6,chatgpt.com,4,2,claude.ai,1,1,,,,,,
 2026-10-09,github.com,57,34,github.ibm.com,24,16,Google,13,10,techzone.ibm.com,13,9,teams.public.onecdn.static.microsoft,13,8,youtube.com,6,6,chatgpt.com,3,1,Bing,1,1,claude.ai,1,1,,,
+2026-10-10,github.com,53,31,github.ibm.com,25,16,teams.public.onecdn.static.microsoft,14,8,techzone.ibm.com,11,9,Google,9,8,youtube.com,6,6,Bing,1,1,claude.ai,1,1,,,,,,
