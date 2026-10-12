@@ -31,15 +31,24 @@ def append_to_csv(filename, data):
 
 def save_views_clones_data(data, filename):
     yesterday = (datetime.now() - timedelta(days=1)).date()
+    # Check existing dates to avoid writing duplicates when the workflow runs twice in a day
+    existing_dates = set()
+    if os.path.isfile(filename):
+        with open(filename, 'r') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                existing_dates.add(row['date'])
     for item in data:
         item_date = datetime.strptime(item['timestamp'][:10], '%Y-%m-%d').date()
         if item_date == yesterday:
-            csv_data = {
-                'date': item_date.strftime('%Y-%m-%d'),
-                'count': item['count'],
-                'uniques': item['uniques']
-            }
-            append_to_csv(filename, csv_data)
+            date_str = item_date.strftime('%Y-%m-%d')
+            if date_str not in existing_dates:
+                csv_data = {
+                    'date': date_str,
+                    'count': item['count'],
+                    'uniques': item['uniques']
+                }
+                append_to_csv(filename, csv_data)
             break
 
 def save_referrers_paths_data(data, filename, data_type):
