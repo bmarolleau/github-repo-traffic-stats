@@ -30,26 +30,25 @@ def append_to_csv(filename, data):
         writer.writerow(data.values())
 
 def save_views_clones_data(data, filename):
-    yesterday = (datetime.now() - timedelta(days=1)).date()
-    # Check existing dates to avoid writing duplicates when the workflow runs twice in a day
+    # Load existing dates to avoid duplicates (handles re-runs and backfill)
     existing_dates = set()
     if os.path.isfile(filename):
         with open(filename, 'r') as f:
             reader = csv.DictReader(f)
             for row in reader:
                 existing_dates.add(row['date'])
+    # Save every day returned by the API that we haven't recorded yet.
+    # The API returns up to 14 days of history, not just yesterday.
     for item in data:
-        item_date = datetime.strptime(item['timestamp'][:10], '%Y-%m-%d').date()
-        if item_date == yesterday:
-            date_str = item_date.strftime('%Y-%m-%d')
-            if date_str not in existing_dates:
-                csv_data = {
-                    'date': date_str,
-                    'count': item['count'],
-                    'uniques': item['uniques']
-                }
-                append_to_csv(filename, csv_data)
-            break
+        date_str = item['timestamp'][:10]
+        if date_str not in existing_dates:
+            csv_data = {
+                'date': date_str,
+                'count': item['count'],
+                'uniques': item['uniques']
+            }
+            append_to_csv(filename, csv_data)
+            existing_dates.add(date_str)
 
 def save_referrers_paths_data(data, filename, data_type):
     today = datetime.now().date().strftime('%Y-%m-%d')
@@ -58,6 +57,14 @@ def save_referrers_paths_data(data, filename, data_type):
     # If data is empty, don't write anything
     if not data:
         return
+
+    # Avoid duplicate rows for today (handles re-runs on same day)
+    if os.path.isfile(filename):
+        with open(filename, 'r') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                if row.get('date') == today:
+                    return
 
     # Ensure we always have 10 items, pad with empty data if necessary
     padded_data = data[:10] + [{'path': '', 'referrer': '', 'count': '', 'uniques': ''}] * (10 - len(data))
